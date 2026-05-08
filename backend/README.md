@@ -22,7 +22,6 @@ Documentação:
 > Antes de rodar, confirme se o terminal está na pasta `/backend`.
 
 ```bash
-npm i
 npm run dev
 ```
 
