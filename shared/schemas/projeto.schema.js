@@ -8,4 +8,5 @@ export const projetoSchema = z.object({
     tecnologias: z
         .array(z.string().min(1, "Tecnologia é obrigatória"))
         .min(1, "Tecnologias são obrigatórias"),
+    link: z.string().nullable().optional(),
 });

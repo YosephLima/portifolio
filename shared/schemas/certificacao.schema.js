@@ -6,5 +6,5 @@ export const certificacaoSchema = z.object({
     ano: z.number().int().refine((value) => value >= 1000 && value <= 9999, {
         message: "Ano deve ter 4 dígitos",
     }),
-    url: z.string().min(1, "URL é obrigatória"),
+    url: z.string().nullable().optional(),
 });

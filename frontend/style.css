@@ -157,39 +157,91 @@ body {
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
 }
 
-.habilidade-modal-content {
+.custom-modal-content {
     background: linear-gradient(145deg, #0d2137 0%, #1a3a5c 100%);
     border: 1px solid #2e5a8f;
     color: #e0e0e0;
 }
 
-#habilidade-form .form-control,
-#habilidade-form .form-select {
+.custom-modal-content .form-control,
+.custom-modal-content .form-select {
     background-color: rgba(255, 255, 255, 0.06);
     border: 1px solid #2e5a8f;
     color: #e0e0e0;
     color-scheme: dark;
 }
 
-#habilidade-form .form-control:focus,
-#habilidade-form .form-select:focus {
+.custom-modal-content .form-control:focus,
+.custom-modal-content .form-select:focus {
     background-color: rgba(255, 255, 255, 0.1);
     border-color: #4a7cb8;
     color: #e0e0e0;
     box-shadow: 0 0 0 0.2rem rgba(74, 124, 184, 0.25);
 }
 
-#habilidade-form .form-control::placeholder {
+.custom-modal-content .form-control::placeholder {
     color: #9db7d4;
 }
 
-#habilidade-form .form-select option {
+.custom-modal-content .form-select option {
     background-color: #000000;
     color: #e0e0e0;
 }
 
-#habilidade-feedback .alert-warning {
+.custom-modal-feedback .alert-warning {
     border: 2px solid #facc15;
     color: #fde047;
     background-color: rgba(250, 204, 21, 0.14);
+}
+
+.custom-modal-feedback .alert-danger {
+    border: 2px solid #f87171;
+    color: #fca5a5;
+    background-color: rgba(248, 113, 113, 0.14);
+}
+
+.admin-edit-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(37, 99, 235, 0.9); /* blue-600 */
+    color: white;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+.card {
+    position: relative; /* Ensures absolute positioning works within cards */
+}
+
+.card:hover .admin-edit-icon,
+.tech-card:hover .admin-edit-icon {
+    opacity: 1;
+}
+
+.admin-edit-icon:hover {
+    background-color: rgba(29, 78, 216, 1); /* blue-700 */
+    transform: scale(1.1);
+}
+
+.card:has(.admin-edit-icon:not(.d-none)):hover .cert-pdf-btn {
+    transform: translateX(-48px);
+}
+
+@media (max-width: 768px) {
+    .admin-edit-icon {
+        opacity: 1; /* always visible on mobile */
+    }
+    .card:has(.admin-edit-icon:not(.d-none)) .cert-pdf-btn {
+        transform: translateX(-48px);
+    }
 }

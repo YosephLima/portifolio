@@ -1,28 +1,17 @@
 import { experienciaSchema } from "../../../shared/schemas/experiencia.schema.js";
-
-let experiencias = [];
-let nextId = 1;
+import { prisma } from "../prisma/client.js";
 
 function validarExperiencia(body, res) {
   const parsed = experienciaSchema.safeParse(body);
 
   if (!parsed.success) {
-
     const errors = {};
-
     parsed.error.issues.forEach((err) => {
       const field = err.path[0];
-      if (!errors[field]) {
-        errors[field] = [];
-      }
+      if (!errors[field]) errors[field] = [];
       errors[field].push(err.message);
     });
-
-    res.status(400).json({
-      message: "Dados de experiência inválidos",
-      errors: errors,
-    });
-
+    res.status(400).json({ message: "Dados de experiência inválidos", errors });
     return null;
   }
 
@@ -30,68 +19,78 @@ function validarExperiencia(body, res) {
 }
 
 // GET /experiencias
-function listar(req, res) {
-  res.json(experiencias);
+async function listar(req, res) {
+  try {
+    const items = await prisma.experiencia.findMany();
+    res.json(items);
+  } catch {
+    res.status(500).json({ message: "Erro interno do servidor" });
+  }
 }
 
 // GET /experiencias/:id
-function buscarPorId(req, res) {
+async function buscarPorId(req, res) {
   const id = Number(req.params.id);
-  const item = experiencias.find((e) => e.id === id);
 
-  if (!item) {
-    return res.status(404).json({ message: "Experiência não encontrada" });
+  try {
+    const item = await prisma.experiencia.findUnique({ where: { id } });
+    if (!item) return res.status(404).json({ message: "Experiência não encontrada" });
+    res.json(item);
+  } catch {
+    res.status(500).json({ message: "Erro interno do servidor" });
   }
-
-  res.json(item);
 }
 
 // POST /experiencias
-function criar(req, res) {
+async function criar(req, res) {
   const data = validarExperiencia(req.body, res);
-  if (!data) {
-    return;
+  if (!data) return;
+
+  try {
+    if (data.atual) {
+      await prisma.experiencia.updateMany({ where: { atual: true }, data: { atual: false } });
+    }
+    const novo = await prisma.experiencia.create({ data });
+    res.status(201).json(novo);
+  } catch {
+    res.status(500).json({ message: "Erro interno do servidor" });
   }
-  const novo = { id: nextId++, ...data };
-  experiencias.push(novo);
-  res.status(201).json(novo);
 }
 
 // PUT /experiencias/:id
-function atualizar(req, res) {
+async function atualizar(req, res) {
   const id = Number(req.params.id);
-  const index = experiencias.findIndex((e) => e.id === id);
 
-  if (index === -1) {
-    return res.status(404).json({ message: "Experiência não encontrada" });
-  }
+  try {
+    const existe = await prisma.experiencia.findUnique({ where: { id } });
+    if (!existe) return res.status(404).json({ message: "Experiência não encontrada" });
 
-  const data = validarExperiencia(req.body, res);
-  if (!data) {
-    return;
+    const data = validarExperiencia(req.body, res);
+    if (!data) return;
+
+    if (data.atual) {
+      await prisma.experiencia.updateMany({ where: { atual: true, id: { not: id } }, data: { atual: false } });
+    }
+    const atualizado = await prisma.experiencia.update({ where: { id }, data });
+    res.json(atualizado);
+  } catch {
+    res.status(500).json({ message: "Erro interno do servidor" });
   }
-  const atualizado = { id, ...data };
-  experiencias[index] = atualizado;
-  res.json(atualizado);
 }
 
 // DELETE /experiencias/:id
-function remover(req, res) {
+async function remover(req, res) {
   const id = Number(req.params.id);
-  const index = experiencias.findIndex((e) => e.id === id);
 
-  if (index === -1) {
-    return res.status(404).json({ message: "Experiência não encontrada" });
+  try {
+    const existe = await prisma.experiencia.findUnique({ where: { id } });
+    if (!existe) return res.status(404).json({ message: "Experiência não encontrada" });
+
+    await prisma.experiencia.delete({ where: { id } });
+    res.json({ message: "Experiência removida com sucesso" });
+  } catch {
+    res.status(500).json({ message: "Erro interno do servidor" });
   }
-
-  experiencias.splice(index, 1);
-  res.json({ message: "Experiência removida com sucesso" });
 }
 
-export {
-  listar,
-  buscarPorId,
-  criar,
-  atualizar,
-  remover,
-};
+export { listar, buscarPorId, criar, atualizar, remover };

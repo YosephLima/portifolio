@@ -7,14 +7,15 @@ Lista unificada de todos os endpoints da aplicação, detalhando os métodos HTT
 ## 📄 Apresentação (Registro Único)
 *Como é um registro único, não há passagem de ID.*
 - **GET** `/apresentacao` : Retorna os dados da apresentação.
-- **PUT** `/apresentacao` : Atualiza a apresentação. *(Body: titulo, descricao)*
+- **PUT** `/apresentacao` : Atualiza a apresentação. *(Body: titulo, texto_negrito, texto_completo)*
 - **DELETE** `/apresentacao` : Remove os dados da apresentação.
 
 **Exemplo de Body (PUT):**
 ```json
 {
-  "titulo": "Desenvolvedor Web",
-  "descricao": "Estudante de Ciência da Computação com foco em desenvolvimento web e infraestrutura."
+  "titulo": "Olá - sou Yoseph Levi",
+  "texto_negrito": "Desenvolvedor de Software focado em criar aplicações web que automatizam e organizam processos nos mais variados setores",
+  "texto_completo": "Sou um Desenvolvedor de Software focado em criar aplicações web que automatizam e organizam processos nos mais variados setores. Meu Fascínio pela Tecnologia tem me levado a entender cada vez mais as camadas mais profundas do funcionamento das tecnologias atuais."
 }
 ```
 
@@ -80,7 +81,7 @@ Lista unificada de todos os endpoints da aplicação, detalhando os métodos HTT
 
 ## 🚀 Projeto
 - **GET** `/projetos` : Lista todos os projetos do portfólio.
-- **POST** `/projetos` : Insere um novo projeto. *(Body: titulo, finalizado, img, descricao, tecnologias)*
+- **POST** `/projetos` : Insere um novo projeto. *(Body: titulo, finalizado, img, descricao, tecnologias, link?)*
 - **PUT** `/projetos/:id` : Atualiza as informações de um projeto.
 - **DELETE** `/projetos/:id` : Remove um projeto da base de dados.
 
@@ -91,7 +92,8 @@ Lista unificada de todos os endpoints da aplicação, detalhando os métodos HTT
   "finalizado": false,
   "img": "[https://meu-dominio.com/assets/akaer.png](https://meu-dominio.com/assets/akaer.png)",
   "descricao": "Plataforma de Gestão de Normas Técnicas para agilizar consulta sobre requisitos técnicos.",
-  "tecnologias": ["JavaScript", "Node.js", "CSS"]
+  "tecnologias": ["JavaScript", "Node.js", "CSS"],
+  "link": "https://github.com/meu-usuario/meu-repo"
 }
 ```
 
@@ -99,7 +101,7 @@ Lista unificada de todos os endpoints da aplicação, detalhando os métodos HTT
 
 ## 📜 Certificação
 - **GET** `/certificacoes` : Lista todos os certificados e cursos.
-- **POST** `/certificacoes` : Adiciona uma nova certificação. *(Body: nome, instituicao, ano, url)*
+- **POST** `/certificacoes` : Adiciona uma nova certificação. *(Body: nome, instituicao, ano, url?)*
 - **PUT** `/certificacoes/:id` : Atualiza uma certificação existente.
 - **DELETE** `/certificacoes/:id` : Exclui uma certificação.
 

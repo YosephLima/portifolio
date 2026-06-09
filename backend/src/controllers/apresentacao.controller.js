@@ -1,37 +1,17 @@
 import { apresentacaoSchema } from "../../../shared/schemas/apresentacao.schema.js";
-
-let apresentacao = [
-  {
-    id: 1,
-    titulo: "Olá - sou Yoseph Levi",
-    descricao: `Sou um Desenvolvedor de Software focado em criar aplicações web que
-                automatizam e organizam processos nos mais variados setores. Meu Fascínio pela
-                Tecnologia
-                (Principalmente na Computação) tem me levado a entender cada vez mais as camadas mais
-                profundas do funcionamento das tecnologias atuais`,
-  },
-];
+import { prisma } from "../prisma/client.js";
 
 function validarApresentacao(body, res) {
   const parsed = apresentacaoSchema.safeParse(body);
 
   if (!parsed.success) {
-
     const errors = {};
-
     parsed.error.issues.forEach((err) => {
       const field = err.path[0];
-      if (!errors[field]) {
-        errors[field] = [];
-      }
+      if (!errors[field]) errors[field] = [];
       errors[field].push(err.message);
     });
-
-    res.status(400).json({
-      message: "Dados de apresentação inválidos",
-      errors: errors,
-    });
-
+    res.status(400).json({ message: "Dados de apresentação inválidos", errors });
     return null;
   }
 
@@ -39,50 +19,49 @@ function validarApresentacao(body, res) {
 }
 
 // GET /apresentacao/:id
-function buscarPorId(req, res) {
+async function buscarPorId(req, res) {
   const id = Number(req.params.id);
-  const item = apresentacao.find((a) => a.id === id);
 
-  if (!item) {
-    return res.status(404).json({ message: "Apresentação não encontrada" });
+  try {
+    const item = await prisma.apresentacao.findUnique({ where: { id } });
+    if (!item) return res.status(404).json({ message: "Apresentação não encontrada" });
+    res.json(item);
+  } catch {
+    res.status(500).json({ message: "Erro interno do servidor" });
   }
-
-  res.json(item);
 }
 
 // PUT /apresentacao/:id
-function atualizar(req, res) {
+async function atualizar(req, res) {
   const id = Number(req.params.id);
-  const index = apresentacao.findIndex((a) => a.id === id);
 
-  if (index === -1) {
-    return res.status(404).json({ message: "Apresentação não encontrada" });
-  }
+  try {
+    const existe = await prisma.apresentacao.findUnique({ where: { id } });
+    if (!existe) return res.status(404).json({ message: "Apresentação não encontrada" });
 
-  const data = validarApresentacao(req.body, res);
-  if (!data) {
-    return;
+    const data = validarApresentacao(req.body, res);
+    if (!data) return;
+
+    const atualizado = await prisma.apresentacao.update({ where: { id }, data });
+    res.json(atualizado);
+  } catch {
+    res.status(500).json({ message: "Erro interno do servidor" });
   }
-  const atualizado = { id, ...data };
-  apresentacao[index] = atualizado;
-  res.json(atualizado);
 }
 
 // DELETE /apresentacao/:id
-function remover(req, res) {
+async function remover(req, res) {
   const id = Number(req.params.id);
-  const index = apresentacao.findIndex((a) => a.id === id);
 
-  if (index === -1) {
-    return res.status(404).json({ message: "Apresentação não encontrada" });
+  try {
+    const existe = await prisma.apresentacao.findUnique({ where: { id } });
+    if (!existe) return res.status(404).json({ message: "Apresentação não encontrada" });
+
+    await prisma.apresentacao.delete({ where: { id } });
+    res.json({ message: "Apresentação removida com sucesso" });
+  } catch {
+    res.status(500).json({ message: "Erro interno do servidor" });
   }
-
-  apresentacao.splice(index, 1);
-  res.json({ message: "Apresentação removida com sucesso" });
 }
 
-export {
-  buscarPorId,
-  atualizar,
-  remover,
-};
+export { buscarPorId, atualizar, remover };

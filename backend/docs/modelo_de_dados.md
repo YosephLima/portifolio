@@ -4,7 +4,8 @@ Abaixo está o detalhamento dos campos, tipos e regras de negócio para cada ent
 
 ### 📄 Apresentação
 - `titulo` (string)
-- `descricao` (string)
+- `texto_negrito` (string) — trecho que será exibido em negrito no frontend
+- `texto_completo` (string) — parágrafo completo, incluindo o trecho em negrito
 > ⚠️ **Regra de Negócio**: Permite apenas READ, UPDATE e DELETE. Trata-se de um registro único, não existindo a operação de POST (Create) para múltiplos registros.
 
 ### 🎓 Formação
@@ -37,12 +38,13 @@ Abaixo está o detalhamento dos campos, tipos e regras de negócio para cada ent
 - `img` (string - URL ou caminho da imagem)
 - `descricao` (string)
 - `tecnologias` (Array de strings)
+- `link` (string, opcional - URL do repositório ou deploy)
 
 ### 📜 Certificação
 - `nome` (string)
 - `instituicao` (string)
 - `ano` (int - formato AAAA)
-- `url` (string - link para validação)
+- `url` (string, opcional - link para validação; null se não houver link público)
 
 ### 📞 Forma de Contato
 - `img` (string - ícone ou logo)

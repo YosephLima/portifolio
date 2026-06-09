@@ -1,28 +1,17 @@
 import { projetoSchema } from "../../../shared/schemas/projeto.schema.js";
-
-let projetos = [];
-let nextId = 1;
+import { prisma } from "../prisma/client.js";
 
 function validarProjeto(body, res) {
   const parsed = projetoSchema.safeParse(body);
 
   if (!parsed.success) {
-
     const errors = {};
-
     parsed.error.issues.forEach((err) => {
       const field = err.path[0];
-      if (!errors[field]) {
-        errors[field] = [];
-      }
+      if (!errors[field]) errors[field] = [];
       errors[field].push(err.message);
     });
-
-    res.status(400).json({
-      message: "Dados de projeto inválidos",
-      errors: errors,
-    });
-
+    res.status(400).json({ message: "Dados de projeto inválidos", errors });
     return null;
   }
 
@@ -30,68 +19,72 @@ function validarProjeto(body, res) {
 }
 
 // GET /projetos
-function listar(req, res) {
-  res.json(projetos);
+async function listar(req, res) {
+  try {
+    const items = await prisma.projeto.findMany();
+    res.json(items);
+  } catch {
+    res.status(500).json({ message: "Erro interno do servidor" });
+  }
 }
 
 // GET /projetos/:id
-function buscarPorId(req, res) {
+async function buscarPorId(req, res) {
   const id = Number(req.params.id);
-  const item = projetos.find((p) => p.id === id);
 
-  if (!item) {
-    return res.status(404).json({ message: "Projeto não encontrado" });
+  try {
+    const item = await prisma.projeto.findUnique({ where: { id } });
+    if (!item) return res.status(404).json({ message: "Projeto não encontrado" });
+    res.json(item);
+  } catch {
+    res.status(500).json({ message: "Erro interno do servidor" });
   }
-
-  res.json(item);
 }
 
 // POST /projetos
-function criar(req, res) {
+async function criar(req, res) {
   const data = validarProjeto(req.body, res);
-  if (!data) {
-    return;
+  if (!data) return;
+
+  try {
+    const novo = await prisma.projeto.create({ data });
+    res.status(201).json(novo);
+  } catch {
+    res.status(500).json({ message: "Erro interno do servidor" });
   }
-  const novo = { id: nextId++, ...data };
-  projetos.push(novo);
-  res.status(201).json(novo);
 }
 
 // PUT /projetos/:id
-function atualizar(req, res) {
+async function atualizar(req, res) {
   const id = Number(req.params.id);
-  const index = projetos.findIndex((p) => p.id === id);
 
-  if (index === -1) {
-    return res.status(404).json({ message: "Projeto não encontrado" });
-  }
+  try {
+    const existe = await prisma.projeto.findUnique({ where: { id } });
+    if (!existe) return res.status(404).json({ message: "Projeto não encontrado" });
 
-  const data = validarProjeto(req.body, res);
-  if (!data) {
-    return;
+    const data = validarProjeto(req.body, res);
+    if (!data) return;
+
+    const atualizado = await prisma.projeto.update({ where: { id }, data });
+    res.json(atualizado);
+  } catch {
+    res.status(500).json({ message: "Erro interno do servidor" });
   }
-  const atualizado = { id, ...data };
-  projetos[index] = atualizado;
-  res.json(atualizado);
 }
 
 // DELETE /projetos/:id
-function remover(req, res) {
+async function remover(req, res) {
   const id = Number(req.params.id);
-  const index = projetos.findIndex((p) => p.id === id);
 
-  if (index === -1) {
-    return res.status(404).json({ message: "Projeto não encontrado" });
+  try {
+    const existe = await prisma.projeto.findUnique({ where: { id } });
+    if (!existe) return res.status(404).json({ message: "Projeto não encontrado" });
+
+    await prisma.projeto.delete({ where: { id } });
+    res.json({ message: "Projeto removido com sucesso" });
+  } catch {
+    res.status(500).json({ message: "Erro interno do servidor" });
   }
-
-  projetos.splice(index, 1);
-  res.json({ message: "Projeto removido com sucesso" });
 }
 
-export {
-  listar,
-  buscarPorId,
-  criar,
-  atualizar,
-  remover,
-};
+export { listar, buscarPorId, criar, atualizar, remover };

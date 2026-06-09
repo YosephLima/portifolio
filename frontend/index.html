@@ -21,7 +21,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top border-bottom"
         style="background: linear-gradient(90deg, #0d2137 0%, #1a3a5c 100%); border-color: #2e5a8f !important;">
         <div class="container">
-            <h3 class="fw-bold my-auto" href="#">Yoseph Levi</h3>
+            <h3 id="admin-login-trigger" class="fw-bold my-auto cursor-pointer" title="Acesso Admin">Yoseph Levi</h3>
             <a style="text-decoration: none;"
                 class="cursor-pointer px-8 py-2.5 bg-blue-500 hover:bg-blue-400 text-white rounded-3xl font-semibold border-2 border-blue-400 shadow-md hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300">
                 Currículo <i class="bi bi-download ml-1"></i>
@@ -36,33 +36,34 @@
                 <div class="w-full md:w-1/4 px-4 text-center mb-6">
                     <img src="./img/me.jpg" alt="Foto de perfil" class="profile-img">
                 </div>
-                <div class="w-full md:w-3/4 px-4">
-                    <div class="card p-6">
-                        <h2 class="text-3xl font-bold mb-4">Olá - sou Yoseph Levi</h2>
-                        <p class="text-lg mb-4">Sou um <b>Desenvolvedor de Software focado em criar aplicações web que
-                                automatizam e organizam processos nos mais variados setores</b>. Meu Fascínio pela
-                            Tecnologia
-                            (Principalmente na Computação) tem me levado a entender cada vez mais as camadas mais
-                            profundas do funcionamento das tecnologias atuais.</p>
-                    </div>
-                </div>
+                <div id="apresentacao-container" class="w-full md:w-3/4 px-4"></div>
             </div>
         </section>
 
         <section id="formacao" class="mb-10">
-            <h2 class="section-title text-center text-2xl font-bold">Formação</h2>
+            <div class="d-flex justify-content-center items-center gap-3 mb-3">
+                <h2 class="section-title text-center text-2xl font-bold mb-0">Formação</h2>
+                <button id="formacao-editar-btn" type="button" class="btn btn-primary habilidades-edit-btn d-none" title="Adicionar Formação" aria-label="Adicionar Formação">
+                    <i class="bi bi-plus-lg"></i>
+                </button>
+            </div>
             <div class="space-y-4" id="formacao-container"></div>
         </section>
 
         <section id="experiencia" class="mb-10">
-            <h2 class="section-title text-center text-2xl font-bold">Experiência Profissional</h2>
+            <div class="d-flex justify-content-center items-center gap-3 mb-3">
+                <h2 class="section-title text-center text-2xl font-bold mb-0">Experiência Profissional</h2>
+                <button id="experiencia-editar-btn" type="button" class="btn btn-primary habilidades-edit-btn d-none" title="Adicionar Experiência" aria-label="Adicionar Experiência">
+                    <i class="bi bi-plus-lg"></i>
+                </button>
+            </div>
             <div id="experiencia-container" class="space-y-4"></div>
         </section>
 
         <section id="habilidades" class="mb-10">
             <div class="d-flex justify-content-center items-center gap-3 mb-3">
                 <h2 class="section-title text-center text-2xl font-bold mb-0">Habilidades Técnicas</h2>
-                <button id="habilidades-editar-btn" type="button" class="btn btn-primary habilidades-edit-btn" title="Modo edição" aria-label="Abrir modo edição de habilidades">
+                <button id="habilidades-editar-btn" type="button" class="btn btn-primary habilidades-edit-btn d-none" title="Modo edição" aria-label="Abrir modo edição de habilidades">
                     <i class="bi bi-plus-lg"></i>
                 </button>
             </div>
@@ -71,9 +72,32 @@
                 </div>
         </section>
 
+        <div class="modal fade" id="login-modal" tabindex="-1" aria-labelledby="login-modal-label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content custom-modal-content">
+                    <div class="modal-header border-bottom">
+                        <h5 class="modal-title" id="login-modal-label">
+                            <i class="bi bi-shield-lock me-2"></i>Acesso Restrito
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="login-form" novalidate>
+                            <div class="mb-3">
+                                <label for="admin-password" class="form-label">Senha de Administrador</label>
+                                <input id="admin-password" type="password" class="form-control" placeholder="Digite a senha">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                        </form>
+                        <div id="login-feedback" class="mt-3 custom-modal-feedback"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="modal fade" id="habilidade-modal" tabindex="-1" aria-labelledby="habilidade-modal-label" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content habilidade-modal-content">
+                <div class="modal-content custom-modal-content">
                     <div class="modal-header border-bottom">
                         <h5 class="modal-title" id="habilidade-modal-label">
                             <i class="bi bi-plus-circle me-2"></i>Adicionar habilidade
@@ -86,9 +110,9 @@
                                 <label for="habilidade-categoria" class="form-label">Categoria</label>
                                 <select id="habilidade-categoria" class="form-select">
                                     <option value="">Selecione uma categoria</option>
-                                    <option value="front-end">Front-end</option>
-                                    <option value="back-end">Back-end</option>
-                                    <option value="ferramentas">Ferramentas</option>
+                                    <option value="Front-End">Front-End</option>
+                                    <option value="Back-End">Back-End</option>
+                                    <option value="Ferramentas">Ferramentas</option>
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -101,24 +125,194 @@
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Adicionar habilidade</button>
                         </form>
-                        <div id="habilidade-feedback" class="mt-3"></div>
+                        <div id="habilidade-feedback" class="mt-3 custom-modal-feedback"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="formacao-modal" tabindex="-1" aria-labelledby="formacao-modal-label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content custom-modal-content">
+                    <div class="modal-header border-bottom">
+                        <h5 class="modal-title" id="formacao-modal-label">
+                            <i class="bi bi-plus-circle me-2"></i>Adicionar Formação
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formacao-form" novalidate>
+                            <div class="mb-3">
+                                <label for="formacao-nome" class="form-label">Nome do Curso</label>
+                                <input id="formacao-nome" type="text" class="form-control" placeholder="Ex: Análise e Desenvolvimento de Sistemas" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="formacao-local" class="form-label">Instituição / Local</label>
+                                <input id="formacao-local" type="text" class="form-control" placeholder="Ex: FATEC" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="formacao-periodo" class="form-label">Período</label>
+                                <input id="formacao-periodo" type="text" class="form-control" placeholder="Ex: 2025 - 2028" required>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="formacao-cursando">
+                                <label class="form-check-label" for="formacao-cursando">
+                                    Cursando atualmente?
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Adicionar Formação</button>
+                        </form>
+                        <div id="formacao-feedback" class="mt-3 custom-modal-feedback"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="experiencia-modal" tabindex="-1" aria-labelledby="experiencia-modal-label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content custom-modal-content">
+                    <div class="modal-header border-bottom">
+                        <h5 class="modal-title" id="experiencia-modal-label">
+                            <i class="bi bi-plus-circle me-2"></i>Adicionar Experiência
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="experiencia-form" novalidate>
+                            <div class="mb-3">
+                                <label for="exp-cargo" class="form-label">Cargo</label>
+                                <input id="exp-cargo" type="text" class="form-control" placeholder="Ex: Desenvolvedor Front-end" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="exp-empresa" class="form-label">Empresa</label>
+                                <input id="exp-empresa" type="text" class="form-control" placeholder="Ex: Tech Corp" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="exp-periodo" class="form-label">Período</label>
+                                <input id="exp-periodo" type="text" class="form-control" placeholder="Ex: Jan 2024 - Presente" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="exp-descricao" class="form-label">Descrição</label>
+                                <textarea id="exp-descricao" class="form-control" rows="2" placeholder="O que você faz/fazia?" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="exp-tecnologias" class="form-label">Tecnologias (separadas por vírgula)</label>
+                                <input id="exp-tecnologias" type="text" class="form-control" placeholder="Ex: React, Node, CSS" required>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="exp-atual">
+                                <label class="form-check-label" for="exp-atual">
+                                    Trabalho atual?
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Adicionar Experiência</button>
+                        </form>
+                        <div id="experiencia-feedback" class="mt-3 custom-modal-feedback"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="projetos-modal" tabindex="-1" aria-labelledby="projetos-modal-label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content custom-modal-content">
+                    <div class="modal-header border-bottom">
+                        <h5 class="modal-title" id="projetos-modal-label">
+                            <i class="bi bi-plus-circle me-2"></i>Adicionar Projeto
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="projetos-form" novalidate>
+                            <div class="mb-3">
+                                <label for="proj-nome" class="form-label">Nome do Projeto</label>
+                                <input id="proj-nome" type="text" class="form-control" placeholder="Ex: Meu App" required>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="proj-finalizado">
+                                <label class="form-check-label" for="proj-finalizado">
+                                    Projeto concluído?
+                                </label>
+                            </div>
+                            <div class="mb-3">
+                                <label for="proj-img" class="form-label">Link da Imagem</label>
+                                <input id="proj-img" type="text" class="form-control" placeholder="URL ou caminho local" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="proj-descricao" class="form-label">Descrição</label>
+                                <textarea id="proj-descricao" class="form-control" rows="2" placeholder="Resumo do projeto..." required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="proj-link" class="form-label">Link de Acesso (Opcional)</label>
+                                <input id="proj-link" type="text" class="form-control" placeholder="https://...">
+                            </div>
+                            <div class="mb-3">
+                                <label for="proj-tecnologias" class="form-label">Tecnologias (separadas por vírgula)</label>
+                                <input id="proj-tecnologias" type="text" class="form-control" placeholder="Ex: HTML, CSS, React">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Adicionar Projeto</button>
+                        </form>
+                        <div id="projetos-feedback" class="mt-3 custom-modal-feedback"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="certificacoes-modal" tabindex="-1" aria-labelledby="certificacoes-modal-label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content custom-modal-content">
+                    <div class="modal-header border-bottom">
+                        <h5 class="modal-title" id="certificacoes-modal-label">
+                            <i class="bi bi-plus-circle me-2"></i>Adicionar Certificação
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="certificacoes-form" novalidate>
+                            <div class="mb-3">
+                                <label for="cert-nome" class="form-label">Nome da Certificação</label>
+                                <input id="cert-nome" type="text" class="form-control" placeholder="Ex: AWS Cloud Practitioner" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cert-instituicao" class="form-label">Instituição</label>
+                                <input id="cert-instituicao" type="text" class="form-control" placeholder="Ex: Amazon Web Services" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cert-ano" class="form-label">Ano</label>
+                                <input id="cert-ano" type="number" class="form-control" placeholder="Ex: 2023" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cert-url" class="form-label">Link (Opcional)</label>
+                                <input id="cert-url" type="text" class="form-control" placeholder="Link para verificar certificado">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Adicionar Certificação</button>
+                        </form>
+                        <div id="certificacoes-feedback" class="mt-3 custom-modal-feedback"></div>
                     </div>
                 </div>
             </div>
         </div>
 
         <section id="projetos" class="mb-10">
-            <h2 class="section-title text-center text-2xl font-bold">Projetos</h2>
-            
+            <div class="d-flex justify-content-center items-center gap-3 mb-3">
+                <h2 class="section-title text-center text-2xl font-bold mb-0">Projetos</h2>
+                <button id="projetos-editar-btn" type="button" class="btn btn-primary habilidades-edit-btn d-none" title="Adicionar Projeto" aria-label="Adicionar Projeto">
+                    <i class="bi bi-plus-lg"></i>
+                </button>
+            </div>
             <div class="row g-4" id="projetos-container">
-                </div>
+            </div>
         </section>
 
         <section id="certificacoes" class="mb-10">
-            <h2 class="section-title text-center text-2xl font-bold">Certificações</h2>
-            
+            <div class="d-flex justify-content-center items-center gap-3 mb-3">
+                <h2 class="section-title text-center text-2xl font-bold mb-0">Certificações</h2>
+                <button id="certificacoes-editar-btn" type="button" class="btn btn-primary habilidades-edit-btn d-none" title="Adicionar Certificação" aria-label="Adicionar Certificação">
+                    <i class="bi bi-plus-lg"></i>
+                </button>
+            </div>
             <div class="row g-3" id="certificacoes-container">
-                </div>
+            </div>
         </section>
 
         <section id="contato" class="mb-10">
@@ -155,8 +349,240 @@
         </div>
     </footer>
 
+    <!-- Modal Edição Apresentação -->
+    <div class="modal fade" id="apresentacao-edit-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal-content">
+                <div class="modal-header border-bottom">
+                    <h5 class="modal-title"><i class="bi bi-pencil me-2"></i>Editar Apresentação</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="apresentacao-edit-form" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label">Título</label>
+                            <input id="apresentacao-edit-titulo" type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Texto Completo</label>
+                            <textarea id="apresentacao-edit-texto-completo" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Trecho em Negrito (deve estar dentro do texto completo)</label>
+                            <input id="apresentacao-edit-texto-negrito" type="text" class="form-control">
+                        </div>
+                        <div class="text-end mt-4">
+                            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modais de Edição -->
+    <!-- Modal Edição Habilidade -->
+    <div class="modal fade" id="habilidade-edit-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal-content">
+                <div class="modal-header border-bottom">
+                    <h5 class="modal-title"><i class="bi bi-pencil me-2"></i>Editar Habilidade</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="habilidade-edit-form" novalidate>
+                        <input type="hidden" id="habilidade-edit-cat-index">
+                        <input type="hidden" id="habilidade-edit-item-index">
+                        <div class="mb-3">
+                            <label class="form-label">Nome da habilidade</label>
+                            <input id="habilidade-edit-nome" type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Link da imagem</label>
+                            <input id="habilidade-edit-img" type="text" class="form-control" required>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" id="habilidade-delete-btn" class="btn btn-danger"><i class="bi bi-trash"></i> Excluir</button>
+                            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                        </div>
+                    </form>
+                    <div id="habilidade-edit-feedback" class="mt-3 custom-modal-feedback"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edição Formação -->
+    <div class="modal fade" id="formacao-edit-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal-content">
+                <div class="modal-header border-bottom">
+                    <h5 class="modal-title"><i class="bi bi-pencil me-2"></i>Editar Formação</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formacao-edit-form" novalidate>
+                        <input type="hidden" id="formacao-edit-index">
+                        <div class="mb-3">
+                            <label class="form-label">Nome do Curso</label>
+                            <input id="formacao-edit-nome" type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Instituição / Local</label>
+                            <input id="formacao-edit-local" type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Período</label>
+                            <input id="formacao-edit-periodo" type="text" class="form-control" required>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="formacao-edit-cursando">
+                            <label class="form-check-label">Cursando atualmente?</label>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" id="formacao-delete-btn" class="btn btn-danger"><i class="bi bi-trash"></i> Excluir</button>
+                            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                        </div>
+                    </form>
+                    <div id="formacao-edit-feedback" class="mt-3 custom-modal-feedback"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edição Experiência -->
+    <div class="modal fade" id="experiencia-edit-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal-content">
+                <div class="modal-header border-bottom">
+                    <h5 class="modal-title"><i class="bi bi-pencil me-2"></i>Editar Experiência</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="experiencia-edit-form" novalidate>
+                        <input type="hidden" id="experiencia-edit-cat-index">
+                        <input type="hidden" id="experiencia-edit-item-index">
+                        <div class="mb-3">
+                            <label class="form-label">Cargo</label>
+                            <input id="experiencia-edit-cargo" type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Empresa</label>
+                            <input id="experiencia-edit-empresa" type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Período</label>
+                            <input id="experiencia-edit-periodo" type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descrição</label>
+                            <textarea id="experiencia-edit-descricao" class="form-control" rows="2" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tecnologias</label>
+                            <input id="experiencia-edit-tecnologias" type="text" class="form-control" required>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="experiencia-edit-atual">
+                            <label class="form-check-label">Trabalho atual?</label>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" id="experiencia-delete-btn" class="btn btn-danger"><i class="bi bi-trash"></i> Excluir</button>
+                            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                        </div>
+                    </form>
+                    <div id="experiencia-edit-feedback" class="mt-3 custom-modal-feedback"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edição Projeto -->
+    <div class="modal fade" id="projetos-edit-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal-content">
+                <div class="modal-header border-bottom">
+                    <h5 class="modal-title"><i class="bi bi-pencil me-2"></i>Editar Projeto</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="projetos-edit-form" novalidate>
+                        <input type="hidden" id="projetos-edit-index">
+                        <div class="mb-3">
+                            <label class="form-label">Nome do Projeto</label>
+                            <input id="projetos-edit-titulo" type="text" class="form-control" required>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="projetos-edit-finalizado">
+                            <label class="form-check-label">Projeto concluído?</label>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Link da Imagem</label>
+                            <input id="projetos-edit-img" type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descrição</label>
+                            <textarea id="projetos-edit-descricao" class="form-control" rows="2" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Link de Acesso (Opcional)</label>
+                            <input id="projetos-edit-link" type="text" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tecnologias (separadas por vírgula)</label>
+                            <input id="projetos-edit-tecnologias" type="text" class="form-control">
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" id="projetos-delete-btn" class="btn btn-danger"><i class="bi bi-trash"></i> Excluir</button>
+                            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                        </div>
+                    </form>
+                    <div id="projetos-edit-feedback" class="mt-3 custom-modal-feedback"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edição Certificação -->
+    <div class="modal fade" id="certificacoes-edit-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal-content">
+                <div class="modal-header border-bottom">
+                    <h5 class="modal-title"><i class="bi bi-pencil me-2"></i>Editar Certificação</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="certificacoes-edit-form" novalidate>
+                        <input type="hidden" id="certificacoes-edit-index">
+                        <div class="mb-3">
+                            <label class="form-label">Nome da Certificação</label>
+                            <input id="certificacoes-edit-nome" type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Instituição</label>
+                            <input id="certificacoes-edit-instituicao" type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ano</label>
+                            <input id="certificacoes-edit-ano" type="number" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Link (Opcional)</label>
+                            <input id="certificacoes-edit-url" type="text" class="form-control">
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" id="certificacoes-delete-btn" class="btn btn-danger"><i class="bi bi-trash"></i> Excluir</button>
+                            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                        </div>
+                    </form>
+                    <div id="certificacoes-edit-feedback" class="mt-3 custom-modal-feedback"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
+    <script type="module" src="js/app.js"></script>
 </body>
 
 </html>

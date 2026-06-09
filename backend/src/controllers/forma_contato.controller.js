@@ -1,28 +1,17 @@
 import { formaContatoSchema } from "../../../shared/schemas/forma_contato.schema.js";
-
-let formasContato = [];
-let nextId = 1;
+import { prisma } from "../prisma/client.js";
 
 function validarFormaContato(body, res) {
   const parsed = formaContatoSchema.safeParse(body);
 
   if (!parsed.success) {
-
     const errors = {};
-
     parsed.error.issues.forEach((err) => {
       const field = err.path[0];
-      if (!errors[field]) {
-        errors[field] = [];
-      }
+      if (!errors[field]) errors[field] = [];
       errors[field].push(err.message);
     });
-
-    res.status(400).json({
-      message: "Dados de forma de contato inválidos",
-      errors: errors,
-    });
-
+    res.status(400).json({ message: "Dados de forma de contato inválidos", errors });
     return null;
   }
 
@@ -30,68 +19,72 @@ function validarFormaContato(body, res) {
 }
 
 // GET /formas-contato
-function listar(req, res) {
-  res.json(formasContato);
+async function listar(req, res) {
+  try {
+    const items = await prisma.formaContato.findMany();
+    res.json(items);
+  } catch {
+    res.status(500).json({ message: "Erro interno do servidor" });
+  }
 }
 
 // GET /formas-contato/:id
-function buscarPorId(req, res) {
+async function buscarPorId(req, res) {
   const id = Number(req.params.id);
-  const item = formasContato.find((f) => f.id === id);
 
-  if (!item) {
-    return res.status(404).json({ message: "Forma de contato não encontrada" });
+  try {
+    const item = await prisma.formaContato.findUnique({ where: { id } });
+    if (!item) return res.status(404).json({ message: "Forma de contato não encontrada" });
+    res.json(item);
+  } catch {
+    res.status(500).json({ message: "Erro interno do servidor" });
   }
-
-  res.json(item);
 }
 
 // POST /formas-contato
-function criar(req, res) {
+async function criar(req, res) {
   const data = validarFormaContato(req.body, res);
-  if (!data) {
-    return;
+  if (!data) return;
+
+  try {
+    const novo = await prisma.formaContato.create({ data });
+    res.status(201).json(novo);
+  } catch {
+    res.status(500).json({ message: "Erro interno do servidor" });
   }
-  const novo = { id: nextId++, ...data };
-  formasContato.push(novo);
-  res.status(201).json(novo);
 }
 
 // PUT /formas-contato/:id
-function atualizar(req, res) {
+async function atualizar(req, res) {
   const id = Number(req.params.id);
-  const index = formasContato.findIndex((f) => f.id === id);
 
-  if (index === -1) {
-    return res.status(404).json({ message: "Forma de contato não encontrada" });
-  }
+  try {
+    const existe = await prisma.formaContato.findUnique({ where: { id } });
+    if (!existe) return res.status(404).json({ message: "Forma de contato não encontrada" });
 
-  const data = validarFormaContato(req.body, res);
-  if (!data) {
-    return;
+    const data = validarFormaContato(req.body, res);
+    if (!data) return;
+
+    const atualizado = await prisma.formaContato.update({ where: { id }, data });
+    res.json(atualizado);
+  } catch {
+    res.status(500).json({ message: "Erro interno do servidor" });
   }
-  const atualizado = { id, ...data };
-  formasContato[index] = atualizado;
-  res.json(atualizado);
 }
 
 // DELETE /formas-contato/:id
-function remover(req, res) {
+async function remover(req, res) {
   const id = Number(req.params.id);
-  const index = formasContato.findIndex((f) => f.id === id);
 
-  if (index === -1) {
-    return res.status(404).json({ message: "Forma de contato não encontrada" });
+  try {
+    const existe = await prisma.formaContato.findUnique({ where: { id } });
+    if (!existe) return res.status(404).json({ message: "Forma de contato não encontrada" });
+
+    await prisma.formaContato.delete({ where: { id } });
+    res.json({ message: "Forma de contato removida com sucesso" });
+  } catch {
+    res.status(500).json({ message: "Erro interno do servidor" });
   }
-
-  formasContato.splice(index, 1);
-  res.json({ message: "Forma de contato removida com sucesso" });
 }
 
-export {
-  listar,
-  buscarPorId,
-  criar,
-  atualizar,
-  remover,
-};
+export { listar, buscarPorId, criar, atualizar, remover };

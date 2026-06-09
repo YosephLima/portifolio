@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import apresentacaoRoutes from "./routes/apresentacao.routes.js";
 import certificacaoRoutes from "./routes/certificacao.routes.js";
 import experienciaRoutes from "./routes/experiencia.routes.js";
@@ -9,6 +10,7 @@ import projetoRoutes from "./routes/projeto.routes.js";
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.use("/apresentacao", apresentacaoRoutes);

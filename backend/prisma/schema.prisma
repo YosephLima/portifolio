@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Apresentacao {
+  id             Int    @id @default(autoincrement())
+  titulo         String
+  texto_negrito  String @db.Text
+  texto_completo String @db.Text
+}
+
+model Certificacao {
+  id          Int     @id @default(autoincrement())
+  nome        String
+  instituicao String
+  ano         Int
+  url         String?
+}
+
+model Experiencia {
+  id          Int     @id @default(autoincrement())
+  nome        String
+  local       String
+  atual       Boolean
+  inicio      String
+  fim         String
+  descricao   String  @db.Text
+  tecnologias Json
+}
+
+model FormaContato {
+  id  Int    @id @default(autoincrement())
+  img String
+  url String
+}
+
+model Formacao {
+  id     Int     @id @default(autoincrement())
+  nome   String
+  status Boolean
+  local  String
+  inicio Int
+  fim    Int
+}
+
+model HabilidadeTecnica {
+  id        Int    @id @default(autoincrement())
+  nome      String
+  categoria String
+  img       String
+}
+
+model Projeto {
+  id          Int     @id @default(autoincrement())
+  titulo      String
+  finalizado  Boolean
+  img         String
+  descricao   String  @db.Text
+  tecnologias Json
+  link        String?
+}
