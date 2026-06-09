@@ -61,6 +61,9 @@ npm run dev
 **5. Inicie o Frontend:**
 Para ver a interface do usuário, acesse a pasta `frontend/` e abra o `index.html` em seu navegador (ou utilize a extensão Live Server do VS Code).
 
+### 🔐 Acesso ao Modo Admin
+Para acessar o modo administrador, clique no nome **"Yoseph Levi"** no cabeçalho (Header) da interface. Irá aparecer um modal solicitando a senha. A senha padrão é: `admin`.
+
 ## 📂 Estrutura do Projeto
 
 Aqui está um resumo da organização dos arquivos:
