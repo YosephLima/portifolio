@@ -1,4 +1,5 @@
-const BASE_URL = 'http://localhost:3001';
+import { USE_MOCK, BACKEND_URL } from './config.js';
+import * as mockData from './data.js';
 
 export const store = {
     apresentacao: {},
@@ -16,7 +17,7 @@ export const raw = {
 };
 
 async function apiFetch(path, options = {}) {
-    const res = await fetch(`${BASE_URL}${path}`, {
+    const res = await fetch(`${BACKEND_URL}${path}`, {
         headers: { 'Content-Type': 'application/json' },
         ...options,
     });
@@ -59,9 +60,25 @@ function groupHabilidades(habs) {
     return [...map.values()];
 }
 
+// --- MOCK ---
+
+function loadMock() {
+    store.apresentacao = mockData.apresentacao;
+    store.formacao = sortFormacaoDesc(mockData.formacao);
+    store.experiencias = mockData.experiencias;
+    store.habilidades = mockData.habilidades;
+    store.projetos = mockData.projetos;
+    store.certificacoes = mockData.certificacoes;
+}
+
 // --- LOAD ALL ---
 
 export async function loadAll() {
+    if (USE_MOCK) {
+        loadMock();
+        return;
+    }
+
     const [apresentacao, formacao, exps, habs, projetos, certificacoes] = await Promise.all([
         apiFetch('/apresentacao/1'),
         apiFetch('/formacoes'),

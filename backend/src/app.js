@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 import apresentacaoRoutes from "./routes/apresentacao.routes.js";
 import certificacaoRoutes from "./routes/certificacao.routes.js";
 import experienciaRoutes from "./routes/experiencia.routes.js";
@@ -7,6 +9,8 @@ import formacaoRoutes from "./routes/formacao.routes.js";
 import formaContatoRoutes from "./routes/forma_contato.routes.js";
 import habilidadeTecnicaRoutes from "./routes/habilidade_tecnica.routes.js";
 import projetoRoutes from "./routes/projeto.routes.js";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 
@@ -21,8 +25,6 @@ app.use("/contatos", formaContatoRoutes);
 app.use("/habilidades", habilidadeTecnicaRoutes);
 app.use("/projetos", projetoRoutes);
 
-app.get("/", (req, res) => {
-  res.json({ status: "ok" });
-});
+app.use(express.static(join(__dirname, "../../frontend")));
 
 export default app;

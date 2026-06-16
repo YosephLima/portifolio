@@ -7,6 +7,6 @@
 
 */
 -- AlterTable
-ALTER TABLE `apresentacao` DROP COLUMN `descricao`,
+ALTER TABLE `Apresentacao` DROP COLUMN `descricao`,
     ADD COLUMN `texto_completo` TEXT NOT NULL,
     ADD COLUMN `texto_negrito` TEXT NOT NULL;
