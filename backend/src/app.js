@@ -25,6 +25,6 @@ app.use("/contatos", formaContatoRoutes);
 app.use("/habilidades", habilidadeTecnicaRoutes);
 app.use("/projetos", projetoRoutes);
 
-app.use(express.static(join(__dirname, "../../frontend")));
+app.use(express.static(join(__dirname, "../../docs")));
 
 export default app;
