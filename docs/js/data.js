@@ -1,3 +1,9 @@
+// FONTE ÚNICA DE DADOS (formato do banco).
+// Consumido por:
+//   - Frontend (GitHub Pages, modo mock): docs/js/api.js
+//   - Seed do backend: backend/prisma/seed.js (import via ../../docs/js/data.js)
+// Mantenha os formatos abaixo alinhados ao schema do Prisma.
+
 export const apresentacao = {
     titulo: 'Olá - sou Yoseph Levi',
     texto_negrito: 'Desenvolvedor de Software focado em criar aplicações web que automatizam e organizam processos nos mais variados setores',
@@ -31,7 +37,7 @@ export const experiencias = [
                 inicio: 'Ago 2025',
                 fim: 'Presente',
                 descricao: "Implementações de novas funcionalidades, refatorações, conexões com API's externas e planilhas de cálculo transformadas em código.",
-                tecnologias: ['React', 'TypeScript', 'PHP', 'MySQL', 'Docker', 'REST APIs'],
+                tecnologias: ['React', 'TypeScript', 'PHP', 'MySQL', 'Docker', "API's RESTful"],
                 atual: true,
             },
         ],
@@ -84,6 +90,8 @@ export const habilidades = [
             { nome: 'Flask', img: './img/tecs/flask.png' },
             { nome: 'REST APIs', img: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg' },
             { nome: 'MySQL', img: './img/tecs/mysql.png' },
+            { nome: 'PrismaORM', img: './img/tecs/prismaorm.png' },
+            { nome: 'Node.js', img: 'https://cdn.iconscout.com/icon/free/png-256/free-no-js-icon-svg-download-png-1174935.png?f=webp&w=128' },
         ],
     },
     {
@@ -115,6 +123,14 @@ export const projetos = [
         descricao: 'Plataforma de Gráficos interativos sobre os dados do Censo 2022 do município de São José dos Campos. Desenvolvido como Projeto Integrador na FATEC SJC, <b>tive minha participação como Product Owner & Back-End Developer</b>, responsável por, principalmente, estruturar a disposição dos gráficos.',
         link: 'https://github.com/OmniDevsOficial/API-Censo-2022',
         tecnologias: ['HTML', 'CSS', 'MySQL', 'AWS', 'Python', 'Flask'],
+    },
+    {
+        titulo: 'Plataforma Normativa Aeronáutica',
+        finalizado: true,
+        img: './img/akaer.png',
+        descricao: 'Sendo <b>um desafio proposto pela Akaer (em parceria com a FATEC)</b>, é uma Plataforma web estruturada para centralizar, organizar e correlacionar requisitos normativos, visando transformar um processo manual e descentralizado em uma fonte de dados organizada, facilitando buscas e evitando uso de versões obsoletas. Desenvolvido como Projeto Integrador na FATEC SJC, <b>tive minha participação como Front-End Developer</b>, atuando na criação de componentes/páginas, como o formulário de cadastro de normas, e em diversas integrações de páginas com o backend.',
+        link: 'https://github.com/OmniDevsOficial/API-Akaer',
+        tecnologias: ['React.js', 'Vite.js', 'TypeScript', 'Node.js', 'Express', 'PrismaORM', 'MySQL'],
     },
 ];
 

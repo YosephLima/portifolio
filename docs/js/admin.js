@@ -341,7 +341,7 @@ export function initAdmin() {
             e.preventDefault();
             const id = editingIds.projeto;
             const techStr = document.getElementById('projetos-edit-tecnologias').value.trim();
-            const titulo = document.getElementById('projetos-edit-nome').value.trim();
+            const titulo = document.getElementById('projetos-edit-titulo').value.trim();
             const finalizado = document.getElementById('projetos-edit-finalizado')?.checked || false;
             const img = document.getElementById('projetos-edit-img').value.trim();
             const descricao = document.getElementById('projetos-edit-descricao').value.trim();
@@ -443,7 +443,7 @@ window.abrirEdicao = function(tipo, i, j) {
         const item = store.projetos[i];
         editingIds.projeto = item.id;
         document.getElementById('projetos-edit-index').value = i;
-        document.getElementById('projetos-edit-nome').value = item.titulo;
+        document.getElementById('projetos-edit-titulo').value = item.titulo;
         if (document.getElementById('projetos-edit-finalizado'))
             document.getElementById('projetos-edit-finalizado').checked = item.finalizado;
         document.getElementById('projetos-edit-img').value = item.img;

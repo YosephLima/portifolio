@@ -1,11 +1,6 @@
 import { prisma } from "../src/prisma/client.js";
-import { apresentacao, formacao, experiencias, habilidades, projetos, certificacoes } from "./data.js";
-
-const CATEGORIA_MAP = {
-    "Front-end": "Front-End",
-    "Back-end": "Back-End",
-    "Ferramentas": "Ferramentas",
-};
+// Fonte única de dados (formato do banco), compartilhada com o frontend.
+import { apresentacao, formacao, experiencias, habilidades, projetos, certificacoes } from "../../docs/js/data.js";
 
 async function seedApresentacao() {
     await prisma.apresentacao.upsert({
@@ -19,18 +14,7 @@ async function seedFormacao() {
     const count = await prisma.formacao.count();
     if (count > 0) return;
 
-    await prisma.formacao.createMany({
-        data: formacao.map((f) => {
-            const [inicio, fim] = f.periodo.split(" - ").map(Number);
-            return {
-                nome: f.nome,
-                local: f.local,
-                status: f.cursando,
-                inicio,
-                fim,
-            };
-        }),
-    });
+    await prisma.formacao.createMany({ data: formacao });
 }
 
 async function seedExperiencias() {
@@ -38,22 +22,7 @@ async function seedExperiencias() {
     if (count > 0) return;
 
     const todas = experiencias.flatMap((e) => e.trabalhos);
-
-    await prisma.experiencia.createMany({
-        data: todas.map((t) => {
-            const [inicio, ...restFim] = t.periodo.split(" - ");
-            const fim = restFim.join(" - ").trim() || "Presente";
-            return {
-                nome: t.cargo,
-                local: t.empresa,
-                atual: t.atual,
-                inicio: inicio.trim(),
-                fim,
-                descricao: t.descricao,
-                tecnologias: t.tecnologias.split(",").map((s) => s.trim()),
-            };
-        }),
-    });
+    await prisma.experiencia.createMany({ data: todas });
 }
 
 async function seedHabilidades() {
@@ -63,7 +32,7 @@ async function seedHabilidades() {
     const todas = habilidades.flatMap((cat) =>
         cat.items.map((item) => ({
             nome: item.nome,
-            categoria: CATEGORIA_MAP[cat.types] ?? cat.types,
+            categoria: cat.categoria,
             img: item.img,
         }))
     );
@@ -75,35 +44,14 @@ async function seedProjetos() {
     const count = await prisma.projeto.count();
     if (count > 0) return;
 
-    await prisma.projeto.createMany({
-        data: projetos.map((p) => ({
-            titulo: p.nome,
-            finalizado: p.status === "Concluído",
-            img: p.img,
-            descricao: p.descricao,
-            tecnologias: p.tecnologias.map((t) => t.nome),
-            link: p.link ?? null,
-        })),
-    });
+    await prisma.projeto.createMany({ data: projetos });
 }
 
 async function seedCertificacoes() {
     const count = await prisma.certificacao.count();
     if (count > 0) return;
 
-    await prisma.certificacao.createMany({
-        data: certificacoes.map((c) => {
-            const partes = c.instituicao.split(" - ");
-            const ano = parseInt(partes[partes.length - 1], 10);
-            const instituicao = partes.slice(0, -1).join(" - ");
-            return {
-                nome: c.nome,
-                instituicao,
-                ano,
-                url: c.link ?? null,
-            };
-        }),
-    });
+    await prisma.certificacao.createMany({ data: certificacoes });
 }
 
 async function seedFormasContato() {
